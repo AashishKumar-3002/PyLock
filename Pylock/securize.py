@@ -1,6 +1,8 @@
 import cv2
 import time
-from invoke_ps1 import invoke_lock_script
+from System.invoke_ps1 import invoke_lock_script
+
+
 # Load pre-trained face and eye detection models
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
