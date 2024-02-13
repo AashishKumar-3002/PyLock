@@ -14,19 +14,24 @@ def detect_eyes(frame):
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     print("----------------")
     print("face", faces)
-    for (x,y,w,h) in faces:
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = frame[y:y+h, x:x+w]
-        # Detect eyes within the region of interest (ROI)
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-        print("eye", eyes)
-        print("eye tensor len" , len(eyes))
-        print("--------------")
-        if len(eyes) == 0:
-            return True  # Eyes closed
     if len(faces) == 0:
         return True
-    else:    
+    else:
+        for (x,y,w,h) in faces:
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = frame[y:y+h, x:x+w]
+            # Detect eyes within the region of interest (ROI)
+            eyes = eye_cascade.detectMultiScale(roi_gray , scaleFactor=1.1, minNeighbors=5, minSize=(30, 30),)
+
+            # draw a rectangle around eyes
+            for (ex,ey,ew,eh) in eyes:
+                cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,255),2)
+                
+            print("eye", eyes)
+            print("eye tensor len" , len(eyes))
+            print("--------------")
+            if len(eyes) == 0:
+                return True  # Eyes closed
         return False  # Eyes open
 
 
@@ -38,7 +43,6 @@ def main():
         # print(ret , frame)
         if not ret:
             break
-
         # Detect eyes
         if detect_eyes(frame):
             # Eyes closed or face not detected
